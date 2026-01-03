@@ -1,0 +1,55 @@
+package org.asupg.downloader.service.impl;
+
+import org.apache.hc.client5.http.cookie.Cookie;
+import org.apache.hc.client5.http.cookie.CookieStore;
+import org.asupg.downloader.model.SessionDTO;
+import org.asupg.downloader.service.ExternalApiService;
+import org.asupg.downloader.service.SessionInitializerService;
+import org.asupg.downloader.util.ConstantsUtil;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.time.Instant;
+
+import static org.asupg.downloader.util.ExtractorUtil.extractPatternFromBody;
+
+@Singleton
+public class SessionInitializerServiceImpl implements SessionInitializerService {
+
+    private final ExternalApiService externalApiService;
+    private final CookieStore cookieStore;
+
+    @Inject
+    public SessionInitializerServiceImpl(
+            ExternalApiService externalApiService,
+            CookieStore cookieStore
+    ) {
+        this.externalApiService = externalApiService;
+        this.cookieStore = cookieStore;
+    }
+
+    @Override
+    public SessionDTO requestSession(String host) {
+        String responseBody = externalApiService.performGet(host);
+
+        Cookie sessionCookie = cookieStore.getCookies()
+                .stream()
+                .filter(cookie -> cookie.getName().equals(ConstantsUtil.JSESSIONID_COOKIE_NAME))
+                .filter(cookie -> !cookie.isExpired(Instant.now()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Session cookie not found"));
+
+        String sessionId = sessionCookie.getValue();
+        String dtUuid = extractPatternFromBody(responseBody, ConstantsUtil.DT_COMPONENT_PATTERN, "dtUuid");
+        String usernameUuid = extractPatternFromBody(responseBody, ConstantsUtil.USERNAME_COMPONENT_PATTERN, "usernameUuid");
+        String passwordUuid = extractPatternFromBody(responseBody, ConstantsUtil.PASSWORD_COMPONENT_PATTERN, "passwordUuid");
+        String loginBtnUuid = extractPatternFromBody(responseBody, ConstantsUtil.LOGIN_BUTTON_PATTERN, "loginBtnUuid");
+
+        SessionDTO sessionDTO = new SessionDTO(sessionId, dtUuid, usernameUuid, passwordUuid, loginBtnUuid);
+
+        System.out.println("Extracted session from response: " + sessionDTO);
+
+        return sessionDTO;
+    }
+
+}
