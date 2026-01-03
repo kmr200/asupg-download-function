@@ -6,6 +6,8 @@ import org.asupg.downloader.model.SessionDTO;
 import org.asupg.downloader.service.ExternalApiService;
 import org.asupg.downloader.service.SessionInitializerService;
 import org.asupg.downloader.util.ConstantsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,6 +17,8 @@ import static org.asupg.downloader.util.ExtractorUtil.extractPatternFromBody;
 
 @Singleton
 public class SessionInitializerServiceImpl implements SessionInitializerService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SessionInitializerServiceImpl.class);
 
     private final ExternalApiService externalApiService;
     private final CookieStore cookieStore;
@@ -47,7 +51,7 @@ public class SessionInitializerServiceImpl implements SessionInitializerService 
 
         SessionDTO sessionDTO = new SessionDTO(sessionId, dtUuid, usernameUuid, passwordUuid, loginBtnUuid);
 
-        System.out.println("Extracted session from response: " + sessionDTO);
+        logger.info("Extracted session from response: {}", sessionDTO);
 
         return sessionDTO;
     }

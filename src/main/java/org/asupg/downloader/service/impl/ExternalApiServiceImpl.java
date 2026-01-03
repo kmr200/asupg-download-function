@@ -10,6 +10,8 @@ import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.asupg.downloader.service.ExternalApiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -20,6 +22,8 @@ import java.util.Map;
 
 @Singleton
 public class ExternalApiServiceImpl implements ExternalApiService {
+
+    private final static Logger logger = LoggerFactory.getLogger(ExternalApiServiceImpl.class);
 
     private final CloseableHttpClient httpClient;
 
@@ -35,7 +39,9 @@ public class ExternalApiServiceImpl implements ExternalApiService {
         addBaseHeaders(httpGet);
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-            return EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            logger.debug("Received response body: {}", responseBody);
+            return responseBody;
         } catch (Exception e) {
             throw new RuntimeException("HTTP request failed", e);
         }
@@ -53,7 +59,9 @@ public class ExternalApiServiceImpl implements ExternalApiService {
         httpPost.setEntity(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-            return EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            logger.debug("Received response body: {}", responseBody);
+            return responseBody;
         } catch (Exception e) {
             throw new RuntimeException("HTTP request failed", e);
         }

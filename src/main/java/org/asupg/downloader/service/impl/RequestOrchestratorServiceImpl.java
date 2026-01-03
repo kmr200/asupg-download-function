@@ -7,12 +7,16 @@ import org.asupg.downloader.service.AuthenticatorService;
 import org.asupg.downloader.service.RequestOrchestratorService;
 import org.asupg.downloader.service.RequestReportService;
 import org.asupg.downloader.service.SessionInitializerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
 public class RequestOrchestratorServiceImpl implements RequestOrchestratorService {
+
+    private static final Logger logger = LoggerFactory.getLogger(RequestOrchestratorServiceImpl.class);
 
     private final BankClientConfig bankClientConfig;
     private final SessionInitializerService sessionInitializerService;
@@ -40,7 +44,7 @@ public class RequestOrchestratorServiceImpl implements RequestOrchestratorServic
 
         String downloadUrl = requestReportService.requestReport(session, authDTO);
 
-        System.out.println(downloadUrl);
+        logger.info("Extracted download url: {}", downloadUrl);
     }
 
 }
