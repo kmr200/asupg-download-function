@@ -38,7 +38,7 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
 
         String responseBody = externalApiService.performPost(host, formBody);
 
-        String statementButtonUuid = ExtractorUtil.extractStatementButtonUuid(responseBody, ConstantsUtil.ACCOUNT);
+        String statementButtonUuid = ExtractorUtil.extractStatementButtonUuid(responseBody, bankClientConfig.getAccount());
 
         AuthDTO authDTO = new AuthDTO(statementButtonUuid);
 

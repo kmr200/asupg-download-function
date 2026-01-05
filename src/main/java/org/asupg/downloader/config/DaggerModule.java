@@ -37,6 +37,27 @@ public class DaggerModule {
 
     @Provides
     @Singleton
+    @Named("bankAccount")
+    String provideBankAccount() {
+        return getEnv("BANK_ACCOUNT");
+    }
+
+    @Provides
+    @Singleton
+    @Named("BLOB_STORAGE_CONN_STR")
+    String provideBlobStorageConnStr() {
+        return getEnv("AzureWebJobsStorage");
+    }
+
+    @Provides
+    @Singleton
+    @Named("BLOB_CONTAINER_NAME")
+    String provideBlobContainerName() {
+        return getEnv("BLOB_CONTAINER_NAME");
+    }
+
+    @Provides
+    @Singleton
     CloseableHttpClient provideHttpClient(CookieStore cookieStore) {
         return HttpClients.custom()
                 .disableAutomaticRetries()

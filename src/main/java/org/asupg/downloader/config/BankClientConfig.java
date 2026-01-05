@@ -10,16 +10,19 @@ public class BankClientConfig {
     private final String host;
     private final String username;
     private final String password;
+    private final String account;
 
     @Inject
     public BankClientConfig(
             @Named("bankHost") String host,
             @Named("bankLogin") String username,
-            @Named("bankPassword") String password
+            @Named("bankPassword") String password,
+            @Named("bankAccount") String account
     ) {
         this.host = host;
         this.username = username;
         this.password = password;
+        this.account = account;
     }
 
     public String getHost() {
@@ -32,5 +35,9 @@ public class BankClientConfig {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getAccount() {
+        return account;
     }
 }

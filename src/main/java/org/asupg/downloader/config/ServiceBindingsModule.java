@@ -30,4 +30,12 @@ public abstract class ServiceBindingsModule {
     @Singleton
     abstract RequestReportService bindRequestReportService(RequestReportServiceImpl service);
 
+    @Binds
+    @Singleton
+    abstract BlobStorageService bindBlobStorageService(BlobStorageServiceImpl service);
+
+    @Binds
+    @Singleton
+    abstract FileDownloadService bindFileDownloadService(FileDownloadServiceImpl service);
+
 }

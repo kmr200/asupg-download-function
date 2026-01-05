@@ -6,7 +6,6 @@ public class ConstantsUtil {
 
     private ConstantsUtil() {}
 
-    public static final String ACCOUNT = "20208000705484900001";
     public static final int DAY_DIFFERENCE = 2;
     public static final String JSESSIONID_COOKIE_NAME = "JSESSIONID";
     public static final int SAFE_SLICE_LENGTH = 5000;
